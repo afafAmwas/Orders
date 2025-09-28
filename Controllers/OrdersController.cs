@@ -65,5 +65,41 @@ namespace Orders.Controllers
             return Ok(report);
         }
 
+        [HttpGet("top-customers")]
+        public ActionResult<List<TopCustomerDto>> GetTopCustomers()
+        {
+            var topCustomers = _service.GetTopCustomersBySpending();
+            return Ok(topCustomers);
+        }
+
+        [HttpGet("monthly-profit")]
+        public ActionResult<List<MonthlyProfitDto>> GetMonthlyProfit(int year)
+        {
+            var report = _service.GetMonthlyProfit(year);
+            return Ok(report);
+        }
+
+        [HttpGet("above-average")]
+        public ActionResult<List<OrderReadDto>> GetOrdersAboveCustomerAverage()
+        {
+            var orders = _service.GetOrdersAboveCustomerAverage();
+            return Ok(orders);
+        }
+
+        [HttpGet("most-recent-per-customer")]
+        public ActionResult<List<CustomerRecentOrderDto>> GetMostRecentOrderPerCustomer()
+        {
+            var orders = _service.GetMostRecentOrderPerCustomer();
+            return Ok(orders);
+        }
+
+        [HttpGet("daily-summary")]
+        public ActionResult<List<DailySummaryDto>> GetDailyOrderSummary()
+        {
+            var summary = _service.GetDailyOrderSummary();
+            return Ok(summary);
+        }
+
+
     }
 }

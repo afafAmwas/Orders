@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Orders.Data;
 
@@ -11,9 +12,11 @@ using Orders.Data;
 namespace Orders.Migrations
 {
     [DbContext(typeof(MyAppContext))]
-    partial class MyAppContextModelSnapshot : ModelSnapshot
+    [Migration("20250928102411_addCostAmount")]
+    partial class addCostAmount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,7 +99,7 @@ namespace Orders.Migrations
                         new
                         {
                             Id = 1,
-                            CostAmount = 60.00m,
+                            CostAmount = 0m,
                             CustomerId = 1,
                             OrderDate = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             TotalAmount = 99.10m
@@ -104,7 +107,7 @@ namespace Orders.Migrations
                         new
                         {
                             Id = 2,
-                            CostAmount = 30.00m,
+                            CostAmount = 0m,
                             CustomerId = 2,
                             OrderDate = new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             TotalAmount = 55.20m
@@ -112,7 +115,7 @@ namespace Orders.Migrations
                         new
                         {
                             Id = 3,
-                            CostAmount = 20.00m,
+                            CostAmount = 0m,
                             CustomerId = 3,
                             OrderDate = new DateTime(2025, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             TotalAmount = 35.99m
@@ -120,7 +123,7 @@ namespace Orders.Migrations
                         new
                         {
                             Id = 4,
-                            CostAmount = 150.00m,
+                            CostAmount = 0m,
                             CustomerId = 4,
                             OrderDate = new DateTime(2025, 1, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             TotalAmount = 200.20m
@@ -128,7 +131,7 @@ namespace Orders.Migrations
                         new
                         {
                             Id = 5,
-                            CostAmount = 40.00m,
+                            CostAmount = 0m,
                             CustomerId = 5,
                             OrderDate = new DateTime(2025, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             TotalAmount = 55.99m

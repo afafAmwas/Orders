@@ -45,5 +45,10 @@ namespace Orders.DataAccess
         {
             _context.SaveChanges();
         }
+        public IQueryable<T> Query()
+        {
+            return _dbSet.AsQueryable();
+        }
+
     }
 }

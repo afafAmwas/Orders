@@ -23,12 +23,13 @@ namespace Orders.Data
             );
 
             modelBuilder.Entity<Order>().HasData(
-                new Order { Id = 1, CustomerId = 1, TotalAmount = 99.10m, OrderDate = new DateTime(2025, 1, 1) },
-                new Order { Id = 2, CustomerId = 2, TotalAmount = 55.20m, OrderDate = new DateTime(2025, 1, 2) },
-                new Order { Id = 3, CustomerId = 3, TotalAmount = 35.99m, OrderDate = new DateTime(2025, 1, 3) },
-                new Order { Id = 4, CustomerId = 4, TotalAmount = 200.20m, OrderDate = new DateTime(2025, 1, 4) },
-                new Order { Id = 5, CustomerId = 5, TotalAmount = 55.99m, OrderDate = new DateTime(2025, 1, 5) }
+                new Order { Id = 1, CustomerId = 1, TotalAmount = 99.10m, CostAmount = 60.00m, OrderDate = new DateTime(2025, 1, 1) },
+                new Order { Id = 2, CustomerId = 2, TotalAmount = 55.20m, CostAmount = 30.00m, OrderDate = new DateTime(2025, 1, 2) },
+                new Order { Id = 3, CustomerId = 3, TotalAmount = 35.99m, CostAmount = 20.00m, OrderDate = new DateTime(2025, 1, 3) },
+                new Order { Id = 4, CustomerId = 4, TotalAmount = 200.20m, CostAmount = 150.00m, OrderDate = new DateTime(2025, 1, 4) },
+                new Order { Id = 5, CustomerId = 5, TotalAmount = 55.99m, CostAmount = 40.00m, OrderDate = new DateTime(2025, 1, 5) }
             );
+
         }
     }
 }

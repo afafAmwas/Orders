@@ -1,6 +1,7 @@
-﻿using Orders.DataAccess;
-using Orders.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Orders.DataAccess;
 using Orders.Dtos;
+using Orders.Models;
 
 namespace Orders.Services
 {
@@ -21,7 +22,8 @@ namespace Orders.Services
                             Id = o.Id,
                             CustomerId = o.CustomerId,
                             TotalAmount = o.TotalAmount,
-                            OrderDate = o.OrderDate
+                            OrderDate = o.OrderDate,
+                            CostAmount = o.CostAmount
                         })
                         .ToList();
         }
@@ -37,7 +39,8 @@ namespace Orders.Services
                 Id = order.Id,
                 CustomerId = order.CustomerId,
                 TotalAmount = order.TotalAmount,
-                OrderDate = order.OrderDate
+                OrderDate = order.OrderDate,
+                CostAmount = order.CostAmount
             };
         }
 
@@ -103,5 +106,109 @@ namespace Orders.Services
 
             return monthlyRevenue;
         }
+
+        public List<TopCustomerDto> GetTopCustomersBySpending(int top = 5)
+        {
+            var query = _repo.Query()
+                .Cast<Order>()                   
+                .Include(o => o.Customer)         
+                .GroupBy(o => o.Customer.FullName)
+                .Select(g => new TopCustomerDto
+                {
+                    FullName = g.Key,
+                    TotalSpent = g.Sum(o => o.TotalAmount)
+                })
+                .OrderByDescending(x => x.TotalSpent)
+                .Take(top)
+                .ToList();
+
+            return query;
+        }
+
+        public List<MonthlyProfitDto> GetMonthlyProfit(int year)
+        {
+            return _repo.Query()
+                .Cast<Order>()
+                .Where(o => o.OrderDate.Year == year)
+                .GroupBy(o => o.OrderDate.Month)
+                .Select(g => new MonthlyProfitDto
+                {
+                    Month = g.Key,
+                    Revenue = g.Sum(o => o.TotalAmount),
+                    Cost = g.Sum(o => o.CostAmount),
+                    Profit = g.Sum(o => o.TotalAmount) - g.Sum(o => o.CostAmount)
+                })
+                .OrderBy(r => r.Month)
+                .ToList();
+        }
+        public List<OrderReadDto> GetOrdersAboveCustomerAverage()
+        {
+            var allOrders = _repo.GetAll().ToList(); // bring all orders into memory
+
+            var result = allOrders
+                .GroupBy(o => o.CustomerId)
+                .SelectMany(g =>
+                {
+                    var avg = g.Average(o => o.TotalAmount);
+                    return g.Where(o => o.TotalAmount > avg);
+                })
+                .Select(o => new OrderReadDto
+                {
+                    Id = o.Id,
+                    CustomerId = o.CustomerId,
+                    TotalAmount = o.TotalAmount,
+                    CostAmount = o.CostAmount,
+                    OrderDate = o.OrderDate
+                })
+                .ToList();
+
+            return result;
+        }
+
+        public List<CustomerRecentOrderDto> GetMostRecentOrderPerCustomer()
+        {
+            var allOrders = _repo.Query()
+                .Cast<Order>()
+                .Include(o => o.Customer)
+                .ToList(); 
+
+            var result = allOrders
+                .GroupBy(o => o.Customer.FullName) 
+                .Select(g =>
+                {
+                    var recentOrder = g.OrderByDescending(o => o.OrderDate).First();
+                    return new CustomerRecentOrderDto
+                    {
+                        CustomerName = g.Key,
+                        OrderId = recentOrder.Id,
+                        OrderDate = recentOrder.OrderDate,
+                        TotalAmount = recentOrder.TotalAmount
+                    };
+                })
+                .ToList();
+
+            return result;
+        }
+        public List<DailySummaryDto> GetDailyOrderSummary()
+        {
+            // bring orders into memory first
+            var allOrders = _repo.GetAll().ToList();
+
+            var summary = allOrders
+                .GroupBy(o => o.OrderDate.Date)       
+                .Where(g => g.Count() >= 2)         
+                .Select(g => new DailySummaryDto
+                {
+                    OrderDate = g.Key,
+                    OrderCount = g.Count(),
+                    DailyRevenue = g.Sum(o => o.TotalAmount)
+                })
+                .OrderBy(s => s.OrderDate)
+                .ToList();
+
+            return summary;
+        }
+
+
     }
 }

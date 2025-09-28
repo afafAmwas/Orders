@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Orders.Dtos;
 using Orders.Models;
 using Orders.Services;
 
@@ -57,5 +58,34 @@ namespace Orders.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("no-orders")]
+        public ActionResult<List<Customer>> GetCustomersWithNoOrders()
+        {
+            var customers = _service.GetCustomersWithNoOrders();
+            return Ok(customers);
+        }
+
+        [HttpGet("average-orders")]
+        public ActionResult<List<CustomerAverageDto>> GetCustomerAverageOrderValue()
+        {
+            var result = _service.GetCustomerAverageOrderValue();
+            return Ok(result);
+        }
+
+        [HttpGet("lifetime-stats")]
+        public ActionResult<List<CustomerLifetimeStatsDto>> GetCustomerLifetimeStats()
+        {
+            var stats = _service.GetCustomerLifetimeStats();
+            return Ok(stats);
+        }
+
+        [HttpGet("customer-order-aggregates")]
+        public ActionResult<List<CustomerOrderAggregateDto>> GetCustomerOrderAggregates()
+        {
+            var result = _service.GetCustomerOrderAggregates();
+            return Ok(result);
+        }
+
     }
 }
