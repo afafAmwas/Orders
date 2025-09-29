@@ -1,5 +1,6 @@
-﻿using Orders.Data;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Orders.Data;
+using System.Linq.Expressions;
 
 namespace Orders.DataAccess
 {
@@ -48,6 +49,16 @@ namespace Orders.DataAccess
         public IQueryable<T> Query()
         {
             return _dbSet.AsQueryable();
+        }
+        //helper function
+        public IQueryable<T> QueryWithInclude(params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _dbSet;
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+            return query;
         }
 
     }

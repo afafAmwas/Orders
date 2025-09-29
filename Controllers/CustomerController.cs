@@ -86,6 +86,5 @@ namespace Orders.Controllers
             var result = _service.GetCustomerOrderAggregates();
             return Ok(result);
         }
-
     }
 }
