@@ -59,28 +59,28 @@ namespace Orders.Controllers
             return NoContent();
         }
 
-        [HttpGet("no-orders")]
+        [HttpGet("NoOrders")]
         public ActionResult<List<Customer>> GetCustomersWithNoOrders()
         {
             var customers = _service.GetCustomersWithNoOrders();
             return Ok(customers);
         }
 
-        [HttpGet("average-orders")]
+        [HttpGet("AverageOrders")]
         public ActionResult<List<CustomerAverageDto>> GetCustomerAverageOrderValue()
         {
             var result = _service.GetCustomerAverageOrderValue();
             return Ok(result);
         }
 
-        [HttpGet("lifetime-stats")]
+        [HttpGet("LifetimeStats")]
         public ActionResult<List<CustomerLifetimeStatsDto>> GetCustomerLifetimeStats()
         {
             var stats = _service.GetCustomerLifetimeStats();
             return Ok(stats);
         }
 
-        [HttpGet("customer-order-aggregates")]
+        [HttpGet("CustomerOrderAggregates")]
         public ActionResult<List<CustomerOrderAggregateDto>> GetCustomerOrderAggregates()
         {
             var result = _service.GetCustomerOrderAggregates();

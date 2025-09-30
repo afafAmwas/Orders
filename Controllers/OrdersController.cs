@@ -58,42 +58,42 @@ namespace Orders.Controllers
             return NoContent();
         }
 
-        [HttpGet("monthly-revenue")]
+        [HttpGet("MonthlyRevenue")]
         public ActionResult<List<MonthlyRevenueDto>> GetMonthlyRevenue()
         {
             var report = _service.GetMonthlyRevenue();
             return Ok(report);
         }
 
-        [HttpGet("top-customers")]
+        [HttpGet("TopCustomers")]
         public ActionResult<List<TopCustomerDto>> GetTopCustomers()
         {
             var topCustomers = _service.GetTopCustomersBySpending();
             return Ok(topCustomers);
         }
 
-        [HttpGet("monthly-profit")]
+        [HttpGet("MonthlyProfit")]
         public ActionResult<List<MonthlyProfitDto>> GetMonthlyProfit(int year)
         {
             var report = _service.GetMonthlyProfit(year);
             return Ok(report);
         }
 
-        [HttpGet("above-average")]
+        [HttpGet("AboveAverage")]
         public ActionResult<List<OrderReadDto>> GetOrdersAboveCustomerAverage()
         {
             var orders = _service.GetOrdersAboveCustomerAverage();
             return Ok(orders);
         }
 
-        [HttpGet("most-recent-per-customer")]
+        [HttpGet("MostRecentPerCustomer")]
         public ActionResult<List<CustomerRecentOrderDto>> GetMostRecentOrderPerCustomer()
         {
             var orders = _service.GetMostRecentOrderPerCustomer();
             return Ok(orders);
         }
 
-        [HttpGet("daily-summary")]
+        [HttpGet("DailySummary")]
         public ActionResult<List<DailySummaryDto>> GetDailyOrderSummary()
         {
             var summary = _service.GetDailyOrderSummary();

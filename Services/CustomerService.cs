@@ -7,49 +7,49 @@ namespace Orders.Services
 {
     public class CustomerService
     {
-        private readonly Repository<Customer> _repo;
+        private readonly Repository<Customer> _customerRepository;
 
-        public CustomerService(Repository<Customer> repo)
+        public CustomerService(Repository<Customer> customerRepository)
         {
-            _repo = repo;
+            _customerRepository = customerRepository;
         }
 
         public List<Customer> GetAllCustomers()
         {
-            return _repo.GetAll().ToList();
+            return _customerRepository.GetAll().ToList();
         }
 
         public Customer? GetCustomerById(int id)
         {
-            return _repo.GetById(id);
+            return _customerRepository.GetById(id);
         }
 
         public Customer AddCustomer(Customer customer)
         {
-            _repo.Add(customer);
-            _repo.Save();
+            _customerRepository.Add(customer);
+            _customerRepository.Save();
             return customer;
         }
 
         public bool UpdateCustomer(int id, Customer customer)
         {
-            var existing = _repo.GetById(id);
+            var existing = _customerRepository.GetById(id);
             if (existing == null)
                 return false;
 
             existing.FullName = customer.FullName;
-            _repo.Save();
+            _customerRepository.Save();
             return true;
         }
 
         public bool DeleteCustomer(int id)
         {
-            var existing = _repo.GetById(id);
+            var existing = _customerRepository.GetById(id);
             if (existing == null)
                 return false;
 
-            _repo.Delete(existing);
-            _repo.Save();
+            _customerRepository.Delete(existing);
+            _customerRepository.Save();
             return true;
         }
 
@@ -57,14 +57,14 @@ namespace Orders.Services
 
         public List<Customer> GetCustomersWithNoOrders()
         {
-            return _repo.QueryWithInclude(c => c.Orders)
+            return _customerRepository.QueryWithInclude(c => c.Orders)
                 .Where(c => !c.Orders.Any())
                 .ToList();
         }
 
         public List<CustomerAverageDto> GetCustomerAverageOrderValue()
         {
-            return _repo.QueryWithInclude(c => c.Orders)
+            return _customerRepository.QueryWithInclude(c => c.Orders)
                 .Where(c => c.Orders.Count >= 3)
                 .Select(c => new CustomerAverageDto
                 {
@@ -77,7 +77,7 @@ namespace Orders.Services
 
         public List<CustomerLifetimeStatsDto> GetCustomerLifetimeStats()
         {
-            return _repo.QueryWithInclude(c => c.Orders)
+            return _customerRepository.QueryWithInclude(c => c.Orders)
                 .Select(c => new CustomerLifetimeStatsDto
                 {
                     CustomerId = c.Id,
@@ -94,7 +94,7 @@ namespace Orders.Services
 
         public List<CustomerOrderAggregateDto> GetCustomerOrderAggregates()
         {
-            return _repo.QueryWithInclude(c => c.Orders)
+            return _customerRepository.QueryWithInclude(c => c.Orders)
                 .Select(c => new CustomerOrderAggregateDto
                 {
                     CustomerId = c.Id,

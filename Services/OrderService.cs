@@ -7,16 +7,16 @@ namespace Orders.Services
 {
     public class OrderService
     {
-        private readonly Repository<Order> _repo;
+        private readonly Repository<Order> _orderRepository;
 
-        public OrderService(Repository<Order> repo)
+        public OrderService(Repository<Order> orderRepository)
         {
-            _repo = repo;
+            _orderRepository = orderRepository;
         }
 
         public List<OrderReadDto> GetAllOrders()
         {
-            return _repo.GetAll()
+            return _orderRepository.GetAll()
                         .Select(o => new OrderReadDto
                         {
                             Id = o.Id,
@@ -30,7 +30,7 @@ namespace Orders.Services
 
         public OrderReadDto? GetOrderById(int id)
         {
-            var order = _repo.GetById(id);
+            var order = _orderRepository.GetById(id);
             if (order == null)
                 return null;
 
@@ -53,8 +53,8 @@ namespace Orders.Services
                 OrderDate = dto.OrderDate
             };
 
-            _repo.Add(order);
-            _repo.Save();
+            _orderRepository.Add(order);
+            _orderRepository.Save();
 
             return new OrderReadDto
             {
@@ -67,7 +67,7 @@ namespace Orders.Services
 
         public bool UpdateOrder(int id, OrderCreateUpdateDto dto)
         {
-            var existing = _repo.GetById(id);
+            var existing = _orderRepository.GetById(id);
             if (existing == null)
                 return false;
 
@@ -75,18 +75,18 @@ namespace Orders.Services
             existing.TotalAmount = dto.TotalAmount;
             existing.OrderDate = dto.OrderDate;
 
-            _repo.Save();
+            _orderRepository.Save();
             return true;
         }
 
         public bool DeleteOrder(int id)
         {
-            var existing = _repo.GetById(id);
+            var existing = _orderRepository.GetById(id);
             if (existing == null)
                 return false;
 
-            _repo.Delete(existing);
-            _repo.Save();
+            _orderRepository.Delete(existing);
+            _orderRepository.Save();
             return true;
         }
         /////////////////////////////////////////////////////////////////////////- Tasks start here
@@ -95,7 +95,7 @@ namespace Orders.Services
         {
             var currentYear = DateTime.Now.Year;
 
-            var monthlyRevenue = _repo.GetAll()
+            var monthlyRevenue = _orderRepository.GetAll()
                 .Where(o => o.OrderDate.Year == currentYear)
                 .GroupBy(o => o.OrderDate.Month)
                 .Select(g => new MonthlyRevenueDto
@@ -111,7 +111,7 @@ namespace Orders.Services
 
         public List<TopCustomerDto> GetTopCustomersBySpending(int top = 5)
         {
-            return _repo.QueryWithInclude(o => o.Customer)
+            return _orderRepository.QueryWithInclude(o => o.Customer)
             .GroupBy(o => o.Customer.FullName)
             .Select(g => new TopCustomerDto
             {
@@ -126,7 +126,7 @@ namespace Orders.Services
 
         public List<MonthlyProfitDto> GetMonthlyProfit(int year)
         {
-            return _repo.Query()
+            return _orderRepository.Query()
                 .Where(o => o.OrderDate.Year == year)
                 .GroupBy(o => o.OrderDate.Month)
                 .Select(g => new MonthlyProfitDto
@@ -141,7 +141,7 @@ namespace Orders.Services
         }
         public List<OrderReadDto> GetOrdersAboveCustomerAverage()
         {
-            var allOrders = _repo.QueryWithInclude(o => o.Customer).ToList();
+            var allOrders = _orderRepository.QueryWithInclude(o => o.Customer).ToList();
 
             var result = allOrders
                 .GroupBy(o => o.CustomerId)
@@ -165,7 +165,7 @@ namespace Orders.Services
 
         public List<CustomerRecentOrderDto> GetMostRecentOrderPerCustomer()
         {
-            var allOrders = _repo.QueryWithInclude(o => o.Customer).ToList();
+            var allOrders = _orderRepository.QueryWithInclude(o => o.Customer).ToList();
 
             return allOrders
                 .GroupBy(o => o.Customer.FullName)
@@ -184,7 +184,7 @@ namespace Orders.Services
         }
         public List<DailySummaryDto> GetDailyOrderSummary()
         {
-            var allOrders = _repo.Query().ToList();
+            var allOrders = _orderRepository.Query().ToList();
 
             return allOrders
                 .GroupBy(o => o.OrderDate.Date)
