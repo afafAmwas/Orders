@@ -9,23 +9,23 @@ namespace Orders.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
-        private readonly CustomerService _service;
+        private readonly CustomerService  _customerService;
 
-        public CustomersController(CustomerService service)
+        public CustomersController(CustomerService customerService)
         {
-            _service = service;
+             _customerService = customerService;
         }
 
         [HttpGet]
         public ActionResult<List<Customer>> GetAll()
         {
-            return Ok(_service.GetAllCustomers());
+            return Ok( _customerService.GetAllCustomers());
         }
 
         [HttpGet("{id}")]
         public ActionResult<Customer> GetById(int id)
         {
-            var customer = _service.GetCustomerById(id);
+            var customer =  _customerService.GetCustomerById(id);
             if (customer == null)
                 return NotFound();
 
@@ -35,14 +35,14 @@ namespace Orders.Controllers
         [HttpPost]
         public ActionResult<Customer> Add(Customer customer)
         {
-            var created = _service.AddCustomer(customer);
+            var created =  _customerService.AddCustomer(customer);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
         [HttpPut("{id}")]
         public IActionResult Update(int id, Customer customer)
         {
-            var updated = _service.UpdateCustomer(id, customer);
+            var updated =  _customerService.UpdateCustomer(id, customer);
             if (!updated)
                 return NotFound();
 
@@ -52,7 +52,7 @@ namespace Orders.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var deleted = _service.DeleteCustomer(id);
+            var deleted =  _customerService.DeleteCustomer(id);
             if (!deleted)
                 return NotFound();
 
@@ -62,28 +62,28 @@ namespace Orders.Controllers
         [HttpGet("NoOrders")]
         public ActionResult<List<Customer>> GetCustomersWithNoOrders()
         {
-            var customers = _service.GetCustomersWithNoOrders();
+            var customers =  _customerService.GetCustomersWithNoOrders();
             return Ok(customers);
         }
 
         [HttpGet("AverageOrders")]
         public ActionResult<List<CustomerAverageDto>> GetCustomerAverageOrderValue()
         {
-            var result = _service.GetCustomerAverageOrderValue();
+            var result =  _customerService.GetCustomerAverageOrderValue();
             return Ok(result);
         }
 
         [HttpGet("LifetimeStats")]
         public ActionResult<List<CustomerLifetimeStatsDto>> GetCustomerLifetimeStats()
         {
-            var stats = _service.GetCustomerLifetimeStats();
+            var stats =  _customerService.GetCustomerLifetimeStats();
             return Ok(stats);
         }
 
         [HttpGet("CustomerOrderAggregates")]
         public ActionResult<List<CustomerOrderAggregateDto>> GetCustomerOrderAggregates()
         {
-            var result = _service.GetCustomerOrderAggregates();
+            var result =  _customerService.GetCustomerOrderAggregates();
             return Ok(result);
         }
     }

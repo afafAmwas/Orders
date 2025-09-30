@@ -8,23 +8,23 @@ namespace Orders.Controllers
     [ApiController]
     public class OrdersController : ControllerBase
     {
-        private readonly OrderService _service;
+        private readonly OrderService  _orderService;
 
-        public OrdersController(OrderService service)
+        public OrdersController(OrderService orderService)
         {
-            _service = service;
+             _orderService = orderService;
         }
 
         [HttpGet]
         public ActionResult<List<OrderReadDto>> GetAll()
         {
-            return Ok(_service.GetAllOrders());
+            return Ok( _orderService.GetAllOrders());
         }
 
         [HttpGet("{id}")]
         public ActionResult<OrderReadDto> GetById(int id)
         {
-            var order = _service.GetOrderById(id);
+            var order =  _orderService.GetOrderById(id);
             if (order == null)
                 return NotFound();
 
@@ -34,14 +34,14 @@ namespace Orders.Controllers
         [HttpPost]
         public ActionResult<OrderReadDto> Add(OrderCreateUpdateDto dto)
         {
-            var created = _service.AddOrder(dto);
+            var created =  _orderService.AddOrder(dto);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
         [HttpPut("{id}")]
         public IActionResult Update(int id, OrderCreateUpdateDto dto)
         {
-            var updated = _service.UpdateOrder(id, dto);
+            var updated =  _orderService.UpdateOrder(id, dto);
             if (!updated)
                 return NotFound();
 
@@ -51,7 +51,7 @@ namespace Orders.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var deleted = _service.DeleteOrder(id);
+            var deleted =  _orderService.DeleteOrder(id);
             if (!deleted)
                 return NotFound();
 
@@ -61,42 +61,42 @@ namespace Orders.Controllers
         [HttpGet("MonthlyRevenue")]
         public ActionResult<List<MonthlyRevenueDto>> GetMonthlyRevenue()
         {
-            var report = _service.GetMonthlyRevenue();
+            var report =  _orderService.GetMonthlyRevenue();
             return Ok(report);
         }
 
         [HttpGet("TopCustomers")]
         public ActionResult<List<TopCustomerDto>> GetTopCustomers()
         {
-            var topCustomers = _service.GetTopCustomersBySpending();
+            var topCustomers =  _orderService.GetTopCustomersBySpending();
             return Ok(topCustomers);
         }
 
         [HttpGet("MonthlyProfit")]
         public ActionResult<List<MonthlyProfitDto>> GetMonthlyProfit(int year)
         {
-            var report = _service.GetMonthlyProfit(year);
+            var report =  _orderService.GetMonthlyProfit(year);
             return Ok(report);
         }
 
         [HttpGet("AboveAverage")]
         public ActionResult<List<OrderReadDto>> GetOrdersAboveCustomerAverage()
         {
-            var orders = _service.GetOrdersAboveCustomerAverage();
+            var orders =  _orderService.GetOrdersAboveCustomerAverage();
             return Ok(orders);
         }
 
         [HttpGet("MostRecentPerCustomer")]
         public ActionResult<List<CustomerRecentOrderDto>> GetMostRecentOrderPerCustomer()
         {
-            var orders = _service.GetMostRecentOrderPerCustomer();
+            var orders =  _orderService.GetMostRecentOrderPerCustomer();
             return Ok(orders);
         }
 
         [HttpGet("DailySummary")]
         public ActionResult<List<DailySummaryDto>> GetDailyOrderSummary()
         {
-            var summary = _service.GetDailyOrderSummary();
+            var summary =  _orderService.GetDailyOrderSummary();
             return Ok(summary);
         }
 
